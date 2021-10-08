@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/blog/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% load crispy_forms_filters %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Поиск по публикациям</h1>
+        <hr class="hr-style-one">
+        {% if 'query' in request.GET %}
+            <h2>Публикации содержащие "{{ query }}"</h2>
+            <h3>Найдено {{ total_results }} результата(ов):</h3>
+            {% for result in results %}
+                {% with post=result.object %}
+                    <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+                {% endwith %}
+                {% empty %}
+                <p>По Вашему запросу нет результатов. Повторите поиск с другим запросом.</p>
+            {% endfor %}
+        {% else %}
+            <p>Вы ещё ничего не искали. Попробуйте ввести Ваш запрос в поле поиска.</p>
+        {% endif %}
+    </div>
+{% endblock %}

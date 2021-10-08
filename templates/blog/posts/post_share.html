@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/blog/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% block title %}Поделиться публикацией{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if sent %}
+            <h1>E-mail успешно отправлен</h1>
+            <p>
+                Публикация "{{ post.title }}" успешно отправлена {{ form_data.recipient_email }}.
+            </p>
+        {% else %}
+            <h1>Поделиться публикацией "{{ post.title }}" через e-mail</h1>
+            <hr class="hr-style-one">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ email_form|crispy }}
+                <button type="submit" class="button"><span>Отправить e-mail</span></button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

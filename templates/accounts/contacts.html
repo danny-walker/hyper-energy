@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/accounts/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block title %}Контакты{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Контакты</h1>
+    <hr class="hr-style-one">
+    <p>По всем вопросам, пожалуйста, свяжитесь с нами по одному из следующих контактов:</p>
+        <a style="margin-right: 5px; color: #474a52" href="https://www.linkedin.com/in/denis-baran/">
+            <img src="{% static 'img/social/linkedin_icon.png' %}" alt="LinkedIn" style="margin-right: 5px"><b>LinkedIn</b></a>
+        <a style="margin-right: 5px; color: #474a52" href="https://t.me/danny_wa1ker">
+        <img src="{% static 'img/social/telegram_icon.png' %}" alt="Telegram" style="margin-right: 5px"><b>Telegram</b></a>
+        <a style="margin-right: 5px; color: #474a52" href="mailto:denis_baran@outlook.com">
+            <img src="{% static 'img/social/email_icon.png' %}" alt="E-mail" style="margin-right: 5px"><b>E-mail</b></a>
+    <br>
+    <br>
+    <p>Или заполните форму обратной связи ниже:</p>
+    <form method="post">
+       {% csrf_token %}
+       {{ form|crispy }}
+       <button type="submit" class="button"><span>Отправить</span></button>
+    </form>
+</div>
+{% endblock %}

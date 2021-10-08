@@ -1,0 +1,85 @@
+.wrapper {
+    display: grid;
+    grid-column-gap: 10px;
+    grid-row-gap: 5px;
+    grid-template-columns: minmax(400px, 500px) 10px minmax(200px, 300px) 80px 350px;
+    }
+
+.wrapper-item-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    margin-top: 5px;
+}
+
+.wrapper-item-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    margin-top: 5px;
+}
+
+.wrapper-item-3 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.wrapper-item-4 {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    margin-top: 5px;
+}
+
+.wrapper-item-5 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    text-align: center;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 3px
+}
+
+.wt-chart {
+    grid-column-start: 5;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 8;
+}
+
+.button {
+  background-color: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #0f1111;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Amazon Ember",sans-serif;
+  font-size: 13px;
+  line-height: 29px;
+  padding: 0 10px 0 11px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  width: 130px;
+}
+
+.button:hover {
+  background-color: #f7fafa;
+}
+
+.button:focus {
+  border-color: #008296;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  outline: 0;
+}
+
+.hr-style-one {
+    border: 0;
+    height: 1px;
+    background: #333 linear-gradient(to right, #ccc, #333, #ccc);
+}

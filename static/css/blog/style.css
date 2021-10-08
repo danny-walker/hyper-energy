@@ -1,0 +1,94 @@
+.wrapper {
+    display: grid;
+    grid-column-gap: 3px;
+    grid-template-columns: 100px auto 130px 130px;
+    }
+
+.wrapper-item-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.wrapper-item-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    margin-left: auto;
+}
+
+.wrapper-item-3 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.wrapper-item-4 {
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+.wrapper-item-5 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.button {
+  background-color: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #0f1111;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Amazon Ember",sans-serif;
+  font-size: 13px;
+  line-height: 29px;
+  padding: 0 10px 0 11px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  width: 130px;
+}
+
+.button:hover {
+  background-color: #f7fafa;
+}
+
+.button:focus {
+  border-color: #008296;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  outline: 0;
+}
+
+.hr-style-one {
+    border: 0;
+    height: 1px;
+    background: #333 linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+.hr-style-two {
+    border: 0;
+    border-radius: 10px;
+    height: 10px;
+    background-image: linear-gradient(to right, #f33939, #4f39f3);
+}
+
+.img-style-one {
+    max-width: 100%;
+    max-height: 100vh;
+    margin: auto;
+    border-radius: 5px;
+    padding: 3px;
+    border: 1px solid lightgrey;
+}
+
+.h-style-one {
+    text-shadow: 1px 1px 5px black;
+}
+
+#like-button {
+    border-radius: 6px;
+}

@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/accounts/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% block title %}Добро пожаловать{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Приветствуем, {{ new_user.first_name }}!</h1>
+        <hr class="hr-style-one">
+        <p>Вы были успешно зарегистрированы. Теперь вы можете <a href="{% url 'accounts:login' %}">войти</a> в свою учетную запись.</p>
+    </div>
+{% endblock %}

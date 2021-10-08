@@ -1,0 +1,62 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/blog/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% load blog_tags %}
+{% block title %}HYPER ENERGY{% endblock %}
+{% block body %}
+<div id="myCarousel" class="carousel carousel slide mx-auto" data-bs-ride="carousel" style="max-width: 90%; max-height: 100vh; margin: auto;">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <img class="img-fluid img-thumbnail mx-auto" src="{{ latest_posts.0.image_url }}" alt="">
+                <div class="carousel-caption">
+                    <h1 class="h-style-one">{{ latest_posts.0.title }}</h1>
+                    <h5 class="h-style-one">{{ latest_posts.0.text|markdown|truncatewords_html:20 }}</h5>
+                    <form class="wrapper-item-3" method="get" action="{{ latest_posts.0.get_absolute_url }}">
+                        <button type="submit" class="button"><span>Подробнее</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <img class="img-fluid img-thumbnail mx-auto" src="{{ latest_posts.1.image_url }}" alt="">
+                <div class="carousel-caption">
+                    <h1 class="h-style-one">{{ latest_posts.1.title }}</h1>
+                    <h5 class="h-style-one">{{ latest_posts.1.text|markdown|truncatewords_html:20 }}</h5>
+                    <form class="wrapper-item-3" method="get" action="{{ latest_posts.1.get_absolute_url }}">
+                        <button type="submit" class="button"><span>Подробнее</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <img class="img-fluid img-thumbnail mx-auto" src="{{ latest_posts.2.image_url }}" alt="">
+                <div class="carousel-caption">
+                    <h1 class="h-style-one">{{ latest_posts.2.title }}</h1>
+                    <h5 class="h-style-one">{{ latest_posts.2.text|markdown|truncatewords_html:20 }}</h5>
+                    <form class="wrapper-item-3" method="get" action="{{ latest_posts.2.get_absolute_url }}">
+                        <button type="submit" class="button"><span>Подробнее</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+{% endblock %}

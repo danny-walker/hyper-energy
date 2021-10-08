@@ -1,0 +1,129 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/calculators/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block title %}Калькулятор для расчета солнечной электростанции{% endblock %}
+{% block content %}
+    {{ form.media.css }}
+    <div class="container">
+        <h1>Калькулятор для расчета солнечной электростанции</h1>
+        <hr class="hr-style-one">
+        <p>*Данный расчет построен на оптимальном ориентировании солнечных модулей в пространстве с отсутствием
+            загораживающих факторов в течении дня (без наличия систем слежения).</p>
+        <p>**Используются осредненные значения удельной солнечной инсоляции для Республики Беларусь (по данным NASA).</p>
+        <p>***Все полученные данные носят приблизительный характер. Для расчета технической и/или экономической части
+            Вашего проекта, пожалуйста, свяжитесь с нами: <a href="{% url 'accounts:contacts' %}">контакты</a>.</p>
+        <hr class="hr-style-one">
+        <form class="wrapper" action="{% url 'calculators:solar_calc_view' %}" method="post">
+            {% csrf_token %}
+            <div class="wrapper-item-1"><h4>Введите значение потребляемой энергии в месяц:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="При отсутствии приборов учеча, расчет потребляемой энергии производится путем
+                 суммирования произведения установленной мощности потребителя на время его работы. Например:
+                 холодильник 150 Вт (10ч/сутки); телевизор 100 Вт (5ч/сутки); компьютер 250 Вт (2ч/сутки);
+                 пылесос 400 Вт (0,5ч/сутки).
+                 Итого в месяц: (150*10+100*5+250*2+400*0,5)*30 = 81000 Вт*ч = 81,0 кВт*ч">&#10068</div>
+            <div class="wrapper-item-3">{{ form.power_cons|as_crispy_field }}</div>
+            <div class="wrapper-item-4"><h4>кВт*ч</h4></div>
+            <div class="wrapper-item-1"><h4>Выберите производителя и модель солнечного модуля:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="В виду различий используемых материалов, солнечные модули разных производителей могут
+                 отличаться характеристиками даже при одинаковой номинальной мощности.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.manufacturer|as_crispy_field }}</div>
+            <div class="wrapper-item-3">{{ form.model_name|as_crispy_field }}</div>
+            <div class="wrapper-item-1">
+                <button type="submit" class="button"><span>Рассчитать</span></button>
+            </div>
+        </form>
+        <hr class="hr-style-one">
+        <div class="wrapper">
+{#            <div class="wrapper-item-1"><h4>Рекомендуемый режим работы для СЭС:</h4></div>#}
+{#            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"#}
+{#                 data-bs-content="Если отношение солнечной радиации в наименее солнечном месяце к радиации за весь год#}
+{#                 больше 50, то режим работы для СЭС необходимо выбрать сезонный, если меньше 50 – круглогодичный.">&#10068</div>#}
+{#            <div class="wrapper-item-5">{{ solar_data.info_message }}</div>#}
+            <div class="wrapper-item-1"><h4>Необходимое количество солнечных модулей:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Количество солнечных модулей для покрытия нагрузки в течение года.">&#10068</div>
+            <div class="wrapper-item-5">{{ solar_data.sm_quantity }}</div>
+            <div class="wrapper-item-4"><h4>шт</h4></div>
+            <div class="wt-chart"><canvas id="myChart" width="350" height="270"></canvas></div>
+            <div class="wrapper-item-1"><h4>Выработка электроэнергии за год:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Выработка электроэнергии солнечной электростанцией с учётом потерь.">&#10068</div>
+            <div class="wrapper-item-5">{{ solar_data.spp_power_output }}</div>
+            <div class="wrapper-item-4"><h4>кВт*ч/год</h4></div>
+        </div>
+    </div>
+    {% block scrtipts %}
+        <script>
+        $(document).ready(function (){
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                    ],
+                    datasets: [{
+                        label: 'Выработка э/э СЭС по месяцам',
+                        data: {{ solar_data.spp_power_output_annual }},
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                            },
+                            beginAtZero: true
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Выработка, кВт*ч'
+                            },
+                            beginAtZero: true
+                        }],
+                    }
+                }
+            });
+        });
+        </script>
+        <script src="{% static 'js/calculators/tooltip.js' %}"></script>
+    {% endblock %}
+    {{ form.media.js }}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/blog/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% block title %}Добавить новую публикацию{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Добавить новую публикацию</h1>
+        <hr class="hr-style-one">
+        <form method="post" class="post-form">
+            {% csrf_token %}
+            {{ post_form|crispy }}
+            {{ post_form.media }}
+            <button type="submit" class="button"><span>Опубликовать</span></button>
+        </form>
+    </div>
+{% endblock %}

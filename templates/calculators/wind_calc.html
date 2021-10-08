@@ -1,0 +1,129 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/calculators/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block title %}Калькулятор для расчета ветрогенератора{% endblock %}
+{% block content %}
+    {{ form.media.css }}
+    <div class="container">
+        <h1>Калькулятор для расчета ветрогенератора</h1>
+        <hr class="hr-style-one">
+        <p>*В данном расчете рассматривается применение, когда ветрогенератор в позиции "stand-alone"
+            и его не перекрывают другие ветрогенераторы или крупные объекты.</p>
+        <p>**Все полученные данные носят приблизительный характер. Для расчета технической и/или экономической части
+            Вашего проекта, пожалуйста, свяжитесь с нами: <a href="{% url 'accounts:contacts' %}">контакты</a>.</p>
+        <hr class="hr-style-one">
+        <form class="wrapper" action="{% url 'calculators:wind_calc_view' %}" method="post">
+            {% csrf_token %}
+            <div class="wrapper-item-1"><h4>Введите среднее значение скорости ветра:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Значение скорости ветра для вашей площадки можно взять на различных ресурсах
+                 мониторинга погоды, типа rp5.by или др.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.raw_wind_speed|as_crispy_field }}</div>
+            <div class="wrapper-item-4"><h4>м/с</h4></div>
+            <div class="wt-chart"><canvas id="myChart" width="370" height="270"></canvas></div>
+            <div class="wrapper-item-1"><h4>Введите значение высоты ветроизмерений:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Обычно на метеостанциях скорость ветра измеряется на высоте 10-12 метров над земной
+                 поверхностью.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.meas_height|as_crispy_field }}</div>
+            <div class="wrapper-item-4"><h4>м</h4></div>
+            <div class="wrapper-item-1"><h4>Выберите тип окружающего ландшафта:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Рельеф площадки и объекты, расположенные вокруг неё, очень сильно влияют на количество
+                 вырабатываемой ветрогенератором электроэнергии.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.roughness_length|as_crispy_field }}</div>
+            <div class="wrapper-item-1"><h4>Выберите производителя и модель ветрогенератора:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Каждая модель ветрогенератора имеет свою кривую мощности, которая определяет сколько
+                 электроэнергии ветрогенертор может выработать при той или иной скорости ветра.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.manufacturer|as_crispy_field }}</div>
+            <div class="wrapper-item-3">{{ form.model_name|as_crispy_field }}</div>
+            <div class="wrapper-item-1"><h4>Введите значение высоты башни ветрогенератора:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Обычно для конкретного ветрогенератора доступно несколько стандартных высот башен, но
+                 некоторые производители изготавливают башни по желанию заказчика.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.hub_height|as_crispy_field }}</div>
+            <div class="wrapper-item-4"><h4>м</h4></div>
+            <div class="wrapper-item-1">
+                <button type="submit" class="button"><span>Рассчитать</span></button>
+            </div>
+        </form>
+        <hr class="hr-style-one">
+        <div class="wrapper">
+            <div class="wrapper-item-1"><h4>Выработка электроэнергии (без учета потерь) за год:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Объем выработываемой электроэнергии на выходе с генератора ветроустановки.">&#10068</div>
+            <div class="wrapper-item-5">{{ wind_data.gross_production }}</div>
+            <div class="wrapper-item-4"><h4>МВт*ч/год</h4></div>
+            <div class="wrapper-item-1"><h4>Годовой КИУМ (без учета потерь):</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Коэффициент использования установленной мощности (КИУМ) - это отношение фактической
+                 энерговыработки ветрогенератора за определённый период эксплуатации к теоретической энерговыработке
+                 при работе без остановок на номинальной мощности.">&#10068</div>
+            <div class="wrapper-item-5">{{ wind_data.gross_capacity_factor }}</div>
+            <div class="wrapper-item-4"><h4>%</h4></div>
+            <div class="wrapper-item-1"><h4>Отпуск электроэнергии (с учетом потерь) за год:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Объем выработываемой электроэнергии с учетом потерь, таких как потери в сетях и
+                 трансформаторах, остановов на обслуживание и ремонт и т.д. Величина значения потерь установленная
+                 в расчете - 16%.">&#10068</div>
+            <div class="wrapper-item-5">{{ wind_data.net_production }}</div>
+            <div class="wrapper-item-4"><h4>МВт*ч/год</h4></div>
+            <div class="wrapper-item-1"><h4>Годовой КИУМ (с учетом потерь):</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Коэффициент использования установленной мощности (КИУМ) - это отношение фактической
+                 энерговыработки ветрогенератора за определённый период эксплуатации к теоретической энерговыработке при
+                 работе без остановок на номинальной мощности.">&#10068</div>
+            <div class="wrapper-item-5">{{ wind_data.net_capacity_factor }}</div>
+            <div class="wrapper-item-4"><h4>%</h4></div>
+        </div>
+    </div>
+    {% block scrtipts %}
+        <script>
+            $(document).ready(function (){
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...Array(24).keys()],
+                    datasets: [{
+                        label: 'Кривая мощности ВЭУ' ,
+                        data: {{ wind_data.wind_turbine }},
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(75, 192, 192)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Скорость ветра, м/с'
+                                },
+                            beginAtZero: true
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Мощность, кВт'
+                                },
+                            beginAtZero: true
+                        }],
+                    }
+                }
+            });
+        });
+        </script>
+        <script src="{% static 'js/calculators/tooltip.js' %}"></script>
+    {% endblock %}
+    {{ form.media.js }}
+{% endblock %}

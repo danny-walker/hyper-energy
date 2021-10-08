@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/calculators/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block title %}Калькулятор для расчета биоэнергетического комплекса{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Калькулятор для расчета биоэнергетического комплекса</h1>
+        <hr class="hr-style-one">
+        <p>*Данный расчет построен с учетом применения блок-модуля когенерационной установки.</p>
+        <p>**Все полученные данные носят приблизительный характер. Для расчета технической и/или экономической части
+            Вашего проекта, пожалуйста, свяжитесь с нами: <a href="{% url 'accounts:contacts' %}">контакты</a>.</p>
+        <hr class="hr-style-one">
+        <form class="wrapper" action="{% url 'calculators:bio_calc_view' %}" method="post">
+            {% csrf_token %}
+            <div class="wrapper-item-1"><h4>Введите значение суточного объема производимого биогаза:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Суммарный объём производимого биогаза вычисляется исходя из видов и размеров
+                 поголовья комплекса, а также параметров сырья поступающего на переработку.">&#10068</div>
+            <div class="wrapper-item-3">{{ form.daily_gas_volume|as_crispy_field }}</div>
+            <div class="wrapper-item-4"><h4>м&sup3;/сут</h4></div>
+            <div class="wrapper-item-1">
+                <button type="submit" class="button"><span>Рассчитать</span></button>
+            </div>
+        </form>
+        <hr class="hr-style-one">
+        <div class="wrapper">
+            <div class="wrapper-item-1"><h4>Тепловая мощность биогазового комплекса:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Тепловая мощность биогазового комплекса в зависимости от суточного объема
+                 производимого биогаза.">&#10068</div>
+            <div class="wrapper-item-5">{{ bio_data.thermal_power }}</div>
+            <div class="wrapper-item-4"><h4>кВт</h4></div>
+            <div class="wrapper-item-1"><h4>Отпуск тепловой энергии в год:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Выработка тепловой энергии установкой с учётом потерь.">&#10068</div>
+            <div class="wrapper-item-5">{{ bio_data.thermal_prod }}</div>
+            <div class="wrapper-item-4"><h4>Гкал/год</h4></div>
+            <div class="wrapper-item-1"><h4>Электрическая мощность биогазового комплекса:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Электрическая мощность биогазового комплекса в зависимости от суточного объема
+                 производимого биогаза.">&#10068</div>
+            <div class="wrapper-item-5">{{ bio_data.electric_power }}</div>
+            <div class="wrapper-item-4"><h4>кВт</h4></div>
+            <div class="wrapper-item-1"><h4>Отпуск электрической энергии в год:</h4></div>
+            <div class="wrapper-item-2" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus"
+                 data-bs-content="Выработка электроэнергии установкой с учётом потерь.">&#10068</div>
+            <div class="wrapper-item-5">{{ bio_data.electricity_prod }}</div>
+            <div class="wrapper-item-4"><h4>кВт*ч/год</h4></div>
+        </div>
+    </div>
+    {% block scrtipts %}
+        <script src="{% static 'js/calculators/tooltip.js' %}"></script>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/accounts/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% block title %}Регистрация нового пользователя{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Регистрация нового пользователя</h1>
+        <hr class="hr-style-one">
+        <p>Пожалуйста, заполните следующую форму:</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ user_form|crispy }}
+            <button type="submit" class="button" style="vertical-align:middle"><span>Отправить</span></button>
+        </form>
+    </div>
+{% endblock %}

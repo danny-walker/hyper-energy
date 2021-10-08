@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' href="{% static 'css/accounts/style.css' %}" rel="stylesheet">
+{% endblock %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Вход</h1>
+        <hr class="hr-style-one">
+        {% if form.errors %}
+            <p>
+                Неверный логин и/или пароль.
+                Пожалуйста, проверьте введенные данные.
+            </p>
+        {% else %}
+            <p>Пожалуйста, введите данные для входа в учетную запись. Если у Вас еще нет учетной записи, то, пожалуйста, <a href="{% url 'accounts:register' %}">зарегистрируйтесь</a>.</p>
+        {% endif %}
+        <div class="login-form">
+            <form action="{% url 'accounts:login' %}" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="hidden" name="next" value="{{ next }}"/>
+                <button type="submit" class="button"><span>Войти</span></button>
+            </form>
+            <br>
+        <p><a href="{% url 'accounts:password_reset' %}">Забыли свой пароль?</a></p>
+        </div>
+        <div class="social">
+            <ul>
+                <li class="google">
+                    <a href="{% url "social:begin" "google-oauth2" %}">
+                    Login with Google
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
